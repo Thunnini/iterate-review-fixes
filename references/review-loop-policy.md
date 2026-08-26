@@ -119,6 +119,17 @@ Keep provisional commits small enough to attribute a change to a root cause. Bef
 
 Preserve a changed final tree only when the difference is intentional and reviewed as new work.
 
+## Fast-forward cleanup
+
+Apply these steps only after the user selects rebase/fast-forward integration:
+
+1. Recheck source-branch movement and worktree cleanliness before integration. If rebasing changes the reviewed commits, rerun validation and a full review before proceeding. Preserve the temporary branch if rebasing, validation, review, or integration fails.
+2. Record the final temporary-branch tip after any rebase. With the source branch checked out in an appropriate clean worktree, integrate using `git merge --ff-only "$temp_branch"`. Do not fall back to a merge commit if fast-forward is unavailable.
+3. Before deletion, verify that the temporary branch still points to the recorded final tip and that this tip is reachable from `refs/heads/$source_branch`. Do not rely on rebase success or `git branch -d` alone as proof of integration into the intended source branch. If verification fails, preserve the branch and report the reason.
+4. Unless the user requested preservation, delete only the local `temp_branch` recorded for this workflow, after confirming it differs from `source_branch`. Switch off the temporary branch before deletion. If it remains checked out in another worktree, preserve it and report the blocker; do not remove worktrees or disrupt their checkouts to force cleanup.
+5. Use `git branch -d -- "$temp_branch"`, never `-D` or another forced deletion. If deletion is refused, leave the branch intact and report why. Do not delete source branches, remote branches, unrelated branches, or worktrees as part of this cleanup.
+6. Verify whether the local temporary-branch ref was removed. Report integration and cleanup separately, including the source branch's final SHA, the temporary branch name, and whether it was deleted or retained with a reason. A cleanup failure does not undo successful integration.
+
 ## Reports
 
 For a deferred report, separate:

@@ -124,8 +124,14 @@ When the final review is clean, report:
 
 Then ask whether to:
 
-1. rebase the temporary commits onto the latest source branch and fast-forward it;
+1. rebase the temporary commits onto the latest source branch, fast-forward it, and delete the local temporary branch after successful integration unless the user requests preservation;
 2. create a merge commit; or
 3. leave the temporary branch unmerged.
 
 Do not perform the integration or delete the temporary branch until the user chooses.
+
+## Clean up after fast-forward integration
+
+After the user selects rebase/fast-forward, delete the workflow-created local temporary branch only after the source branch has successfully integrated its final tip. A successful rebase alone does not authorize cleanup. Honor an explicit request to preserve the branch.
+
+Follow the [fast-forward cleanup policy](references/review-loop-policy.md#fast-forward-cleanup) for verification, safe deletion, and reporting. This automatic cleanup applies only to the rebase/fast-forward choice; it does not apply to the merge-commit or unmerged choices.
