@@ -1,0 +1,4 @@
+interface:
+  display_name: "Iterate Review Fixes"
+  short_description: "Review and fix until only deferred issues remain"
+  default_prompt: "Use $iterate-review-fixes to review and repair the current changes on a temporary branch until no actionable issues remain."
